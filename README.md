@@ -36,7 +36,11 @@ Se validó la infraestructura mediante:
 
 show crypto isakmp sa: Verificación del túnel fase 1.
 
+![Evidencia Arquitectura](Imagenes/cifrado.JPG)
+
 show ip ospf neighbor: Confirmación de adyacencias dinámicas.
+
+![Evidencia Arquitectura](Imagenes/Provando_dhcp_ospf.JPG)
 
 ping: Pruebas de latencia y conectividad extremo a extremo.
 
