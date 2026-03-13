@@ -2,6 +2,8 @@
 Diseño y despliegue de infraestructura de red segura: VPN Site-to-Site, túneles GRE sobre IPSec y enrutamiento dinámico OSPF en entornos Cisco.
 Secure Site-to-Site VPN & OSPF Infrastructure
 
+!Topoligia(Imagenes/topologia.JPG)
+
 🌐 Resumen del Proyecto
 
 Simulación de una red corporativa de alta disponibilidad utilizando GNS3. El proyecto demuestra la capacidad de interconectar oficinas geográficamente distantes de forma segura y automática.
