@@ -1,0 +1,39 @@
+SW_1**
+enable
+!
+configure terminal
+!
+hostname SW1_Quispe
+!
+vlan 10
+ name vlan10
+!
+vlan 20
+ name vlan20
+!
+vlan 30
+ name vlan30
+!
+vlan 40
+ name vlan40
+exit
+!
+interface range F1/0-3
+switchport mode access
+switchport access vlan 10
+!
+interface range F1/4-7
+switchport mode access
+switchport access vlan 20
+!
+interface range F1/8-11
+switchport mode access
+switchport access vlan 30
+!
+interface range F1/12-15
+switchport mode access
+switchport access vlan 40
+!
+interface F0/0
+switchport mode trunk
+!

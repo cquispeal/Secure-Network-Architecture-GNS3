@@ -1,0 +1,89 @@
+enable
+!
+configure terminal
+!
+hostname R3-Quispe
+!
+interface s0/0
+ description link to Internet
+ ip address 183.163.33.1 255.255.255.252
+ no shutdown
+!
+interface f0/0.10
+ encapsulation dot1q 10
+ ip address 192.168.1.1 255.255.255.0
+!
+interface f0/0.20
+ encapsulation dot1q 20
+ ip address 192.168.2.1 255.255.255.0
+!
+interface f0/0
+ description link to LAN
+ no shutdown
+!
+NAT*****
+ip route 0.0.0.0 0.0.0.0 183.163.33.2
+!
+access-list 1 permit 192.168.1.1 0.0.0.255
+access-list 1 permit 192.168.2.1 0.0.0.255
+!
+ip nat inside source list 1 interface s0/0 overload
+!
+interface s0/0
+ip nat outside
+!
+interface f0/0.10
+ip nat inside
+interface f0/0.20
+ip nat inside
+!
+
+
+DHCP*******
+ip dhcp excluded-address 192.168.1.1 192.168.1.10
+ip dhcp excluded-address 192.168.2.1 192.168.2.10
+!
+ip dhcp pool vlan-10
+network 192.168.1.0 255.255.255.0
+default-router 192.168.1.1
+dns-server 8.8.8.8
+!
+ip dhcp pool vlan-20
+network 192.168.2.0 255.255.255.0
+default-router 192.168.2.1
+dns-server 8.8.8.8
+!
+
+GREE***
+interface tunnel 0
+ description Tunnel VPN
+ ip address 10.0.0.2 255.255.255.252
+ tunnel source 183.163.33.1
+ tunnel destination 193.163.33.1
+!
+
+ofps***
+router ospf 1
+ router-id 2.2.2.2
+ network 10.0.0.0 0.0.0.3 area 0
+ network 192.168.1.0 0.0.0.255 area 0
+ network 192.168.2.0 0.0.0.255 area 0
+!
+cifrado***
+crypto isakmp policy 1
+ encr aes 256
+ authentication pre-share
+ hash sha
+ group 5
+!
+crypto isakmp key Cisco123 address 193.163.33.1
+!
+crypto ipsec transform-set CIPHER_TUNNEL esp-aes 256 esp-sha-hmac
+!
+crypto ipsec profile TUNNEL_IPSEC
+ set transform-set CIPHER_TUNNEL
+!
+interface tunnel 0
+tunnel protection ipsec profile TUNNEL_IPSEC
+!
+

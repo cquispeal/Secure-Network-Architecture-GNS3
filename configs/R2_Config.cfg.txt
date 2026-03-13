@@ -1,0 +1,117 @@
+R2******
+enable
+configure terminal
+!
+hostname R2-Quispe
+!
+interface s0/0
+ description link to Internet
+ ip address 193.163.33.1 255.255.255.252
+ no shutdown
+!
+interface f0/0.10
+ encapsulation dot1q 10
+ ip address 172.16.1.1 255.255.255.0
+!
+interface f0/0.20
+ encapsulation dot1q 20
+ ip address 172.16.2.1 255.255.255.0
+!
+interface f0/0.30
+ encapsulation dot1q 30
+ ip address 172.16.3.1 255.255.255.0
+!
+interface f0/0.40
+ encapsulation dot1q 40
+ ip address 172.16.4.1 255.255.255.0
+!
+interface f0/0
+ description link to LAN
+ no shutdown
+!
+
+NAT*****
+ip route 0.0.0.0 0.0.0.0 193.163.33.2
+!
+access-list 1 permit 172.16.1.1 0.0.0.255
+access-list 1 permit 172.16.2.1 0.0.0.255
+access-list 1 permit 172.16.3.1 0.0.0.255
+access-list 1 permit 172.16.4.1 0.0.0.255
+!
+ip nat inside source list 1 interface s0/0 overload
+!
+interface s0/0
+ip nat outside
+!
+interface f0/0.10
+ip nat inside
+interface f0/0.20
+ip nat inside
+interface f0/0.30
+ip nat inside
+interface f0/0.40
+ip nat inside
+!
+
+DHCP*******
+ip dhcp excluded-address 172.16.1.1 172.16.1.10
+ip dhcp excluded-address 172.16.2.1 172.16.2.10
+ip dhcp excluded-address 172.16.3.1 172.16.3.10
+ip dhcp excluded-address 172.16.4.1 172.16.4.10
+!
+ip dhcp pool vlan-10
+network 172.16.1.0 255.255.255.0
+default-router 172.16.1.1
+dns-server 8.8.8.8
+!
+ip dhcp pool vlan-20
+network 172.16.2.0 255.255.255.0
+default-router 172.16.2.1
+dns-server 8.8.8.8
+!
+ip dhcp pool vlan-30
+network 172.16.3.0 255.255.255.0
+default-router 172.16.3.1
+dns-server 8.8.8.8
+!
+ip dhcp pool vlan-40
+network 172.16.4.0 255.255.255.0
+default-router 172.16.4.1
+dns-server 8.8.8.8
+!
+
+GRE***
+interface tunnel 0
+description Tunnel VPN
+ip address 10.0.0.1 255.255.255.252
+tunnel source 193.163.33.1
+tunnel destination 183.163.33.1
+!
+
+ofps***
+router ospf 1
+ router-id 1.1.1.1
+ network 10.0.0.0 0.0.0.3 area 0
+ network 172.16.1.0 0.0.0.255 area 0
+ network 172.16.2.0 0.0.0.255 area 0
+ network 172.16.3.0 0.0.0.255 area 0
+ network 172.16.4.0 0.0.0.255 area 0
+!
+
+cifrado***
+crypto isakmp policy 1
+ encr aes 256
+ authentication pre-share
+ hash sha
+ group 5
+!
+crypto isakmp key Cisco123 address 183.163.33.1
+!
+crypto ipsec transform-set CIPHER_TUNNEL esp-aes 256 esp-sha-hmac
+!
+crypto ipsec profile TUNNEL_IPSEC
+ set transform-set CIPHER_TUNNEL
+!
+interface tunnel 0
+tunnel protection ipsec profile TUNNEL_IPSEC
+!

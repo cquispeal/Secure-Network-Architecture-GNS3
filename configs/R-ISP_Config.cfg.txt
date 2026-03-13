@@ -1,0 +1,14 @@
+ISP***
+interface s0/0
+ description link to Client_1
+ ip address 193.163.33.2 255.255.255.252
+ no shutdown
+!
+interface s0/1
+ description link to Client_2
+ ip address 183.163.33.2 255.255.255.252
+ no shutdown
+!
+interface loop0
+ip address 8.8.8.8 255.255.255.255
+!
