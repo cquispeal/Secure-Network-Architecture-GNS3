@@ -2,7 +2,7 @@
 Diseño y despliegue de infraestructura de red segura: VPN Site-to-Site, túneles GRE sobre IPSec y enrutamiento dinámico OSPF en entornos Cisco.
 Secure Site-to-Site VPN & OSPF Infrastructure
 
-!Topoligia(Imagenes/topologia.JPG)
+![Evidencia Arquitectura](Imagenes/topologia.JPG)
 
 🌐 Resumen del Proyecto
 
